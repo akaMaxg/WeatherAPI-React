@@ -31,7 +31,7 @@ jobs:
     workingDirectory: $(Build.SourcesDirectory)
 
 - job: DeployToAzure
-  dependsOn: [BuildAPI, BuildClient]
+  dependsOn: [BuildAPI]
   condition: succeeded()
   steps:
   - checkout: self
