@@ -1,0 +1,50 @@
+trigger:
+- main
+
+pr:
+- '*'
+
+pool:
+  name: MaxAgent
+
+jobs:
+- job: BuildAPI
+  steps:
+  - checkout: self
+    submodules: true
+
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+
+  - script: dotnet restore APIs/WeatherAPI-React
+    displayName: 'Restore API Dependencies'
+    workingDirectory: $(Build.SourcesDirectory)
+
+  - script: dotnet build APIs/WeatherAPI-React --configuration Release
+    displayName: 'Build API'
+    workingDirectory: $(Build.SourcesDirectory)
+
+  - script: dotnet test APIs/WeatherAPITests/WeatherAPITests.csproj --logger "trx;LogFileName=test_results.trx"
+    displayName: 'Run API Tests'
+    workingDirectory: $(Build.SourcesDirectory)
+
+- job: DeployToAzure
+  dependsOn: [BuildAPI, BuildClient]
+  condition: succeeded()
+  steps:
+  - checkout: self
+    submodules: true
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'publish'
+      publishWebProjects: true
+
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: 'ServiceName'  # Replace with your Azure service connection name
+      appType: 'webApp'
+      appName: 'WeatherAPI-TDD'  # Replace with your Azure Web App name
+      package: '$(System.DefaultWorkingDirectory)/**/*.zip'
