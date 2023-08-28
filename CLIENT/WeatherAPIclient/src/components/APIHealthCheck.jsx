@@ -10,7 +10,9 @@ const APIHealthcheck = () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios("https://localhost:7123/weather");
+        const result = await axios(
+          "https://weatherapi-tdd.azurewebsites.net/weather"
+        );
         setHealthCheck("Online");
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -24,7 +26,9 @@ const APIHealthcheck = () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios("https://localhost:7123/APIcounter");
+        const result = await axios(
+          "https://weatherapi-tdd.azurewebsites.net/weather/APIcounter"
+        );
         setRequestCount(result.data.count);
         // console.log(result.data.count);
       } catch (error) {
