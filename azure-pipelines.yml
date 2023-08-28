@@ -53,5 +53,5 @@ jobs:
       WebAppName: 'WeatherAPI-TDD'
       deployToSlotOrASE: true
       ResourceGroupName: 'myResourceGroup'
-      package: '$(Build.ArtifactStagingDirectory)/publish'
-      AdditionalArguments:
+      packageForLinux: '$(Pipeline.Workspace)/APIs/WeatherAPI-React/bin/Release/net6.0/publish'
+      AdditionalArguments: '--configuration Release'
