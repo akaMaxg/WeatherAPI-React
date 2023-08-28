@@ -18,20 +18,20 @@ jobs:
       packageType: 'sdk'
       installationPath: $(Agent.ToolsDirectory)/dotnet
 
-  - script: dotnet restore API/WeatherAPI
+  - script: dotnet restore APIs/WeatherAPI-React
     displayName: 'Restore API Dependencies'
     workingDirectory: $(Build.SourcesDirectory)
 
-  - script: dotnet build API/WeatherAPI --configuration Release
+  - script: dotnet build APIs/WeatherAPI-React --configuration Release
     displayName: 'Build API'
     workingDirectory: $(Build.SourcesDirectory)
 
-  - script: dotnet test API/Tests-WeatherAPI/Tests-WeatherAPI.csproj --logger "trx;LogFileName=test_results.trx"
+  - script: dotnet test APIs/WeatherAPITests/WeatherAPITests.csproj --logger "trx;LogFileName=test_results.trx"
     displayName: 'Run API Tests'
     workingDirectory: $(Build.SourcesDirectory)
 
   - script: |
-      dotnet publish "$(Build.SourcesDirectory)/API/WeatherAPI/WeatherAPI.csproj" --configuration Release --output "$(Build.ArtifactStagingDirectory)/publish"
+      dotnet publish "$(Build.SourcesDirectory)/APIs/WeatherAPI-React/WeatherAPI-React.csproj" --configuration Release --output "$(Build.ArtifactStagingDirectory)/publish"
     displayName: 'Publish API'
     workingDirectory: $(Build.SourcesDirectory)
 
