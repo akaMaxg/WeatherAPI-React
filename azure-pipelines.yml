@@ -30,28 +30,26 @@ jobs:
     displayName: 'Run API Tests'
     workingDirectory: $(Build.SourcesDirectory)
 
-  - script: |
-      dotnet publish "$(Build.SourcesDirectory)/APIs/WeatherAPI-React/WeatherAPI-React.csproj" --configuration Release --output "$(Build.ArtifactStagingDirectory)/publish"
-    displayName: 'Publish API'
-    workingDirectory: $(Build.SourcesDirectory)
-
-  - script: dir "$(Build.ArtifactStagingDirectory)/publish" /s
-    displayName: 'List Publish Folder Contents'
+- job: BuildClient
+  steps:
+  - checkout: self
+    submodules: true
 
 - job: DeployToAzure
-  dependsOn: [BuildAPI]
+  dependsOn: [BuildAPI, BuildClient]
   condition: succeeded()
   steps:
   - checkout: self
     submodules: true
 
-  - task: AzureRmWebAppDeployment@4
+  - task: DotNetCoreCLI@2
     inputs:
-      ConnectionType: 'AzureRM'
-      azureSubscription: 'ServiceName'
+      command: 'publish'
+      publishWebProjects: true
+
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: 'ServiceName'  # Replace with your Azure service connection name
       appType: 'webApp'
-      WebAppName: 'WeatherAPI-TDD'
-      deployToSlotOrASE: true
-      ResourceGroupName: 'myResourceGroup'
-      package: '$(Build.ArtifactStagingDirectory)/publish'
-      AdditionalArguments:
+      appName: 'WeatherAPI-TDD'  # Replace with your Azure Web App name
+      package: '$(System.DefaultWorkingDirectory)/**/*.zip'
