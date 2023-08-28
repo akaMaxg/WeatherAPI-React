@@ -30,11 +30,6 @@ jobs:
     displayName: 'Run API Tests'
     workingDirectory: $(Build.SourcesDirectory)
 
-- job: BuildClient
-  steps:
-  - checkout: self
-    submodules: true
-
 - job: DeployToAzure
   dependsOn: [BuildAPI, BuildClient]
   condition: succeeded()
