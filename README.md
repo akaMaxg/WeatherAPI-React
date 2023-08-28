@@ -7,7 +7,8 @@ This console application was created by *Max Guclu*. The project was conducted a
 During the project i utilized a Kanban board and and attempted to apply agile methodology and tracked- and version-managed our project with **Trello** and **Git / Github**.   
 
 -  [*Trello link*](https://trello.com/b/RyeLokME/cicd)
--  [*Github link*](https://github.com/akaMaxg/WeatherAPI-React)  
+-  [*Github link*](https://github.com/akaMaxg/WeatherAPI-React)
+-  [Demo-inspelning](https://drive.google.com/file/d/1NSRYfxK9yJyISQUsdwCBnepeNgKSHUe1/view?usp=sharing)
 
 ## Installation
 
