@@ -3,7 +3,7 @@ import axios from "axios";
 
 //functions
 function WeatherCard() {
-  const Url = "https://localhost:7123/weather";
+  const Url = "https://weatherapi-tdd.azurewebsites.net/weather";
   const [Data, setData] = React.useState(null);
 
   React.useEffect(() => {

@@ -3,7 +3,7 @@ import axios from "axios";
 
 //functions
 function WeatherCardFavourite(props) {
-  const url = "https://localhost:7123/weather/" + props.city;
+  const url = "https://weatherapi-tdd.azurewebsites.net/weather/" + props.city;
   const [data, setData] = useState(null);
 
   useEffect(() => {
