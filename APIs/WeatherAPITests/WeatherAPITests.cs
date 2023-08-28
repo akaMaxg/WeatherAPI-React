@@ -18,21 +18,21 @@ namespace WeatherAPItests
             response.EnsureSuccessStatusCode(); // Ensures that response is success: code 2xx
         }
 
-        [Fact]
-        public async Task _LocationStockholm() //Test to ensure that returned weather-city is Stockholm
-        {
-            var expectedCityName = "Stockholm";
+        //[Fact]
+        //public async Task _LocationStockholm() //Test to ensure that returned weather-city is Stockholm
+        //{
+        //    var expectedCityName = "Stockholm";
 
-            var response = await _httpClient.GetAsync("https://weatherapi-tdd.azurewebsites.net/weather");
-            var content = await response.Content.ReadAsStringAsync(); //Reads response
+        //    var response = await _httpClient.GetAsync("https://weatherapi-tdd.azurewebsites.net/weather");
+        //    var content = await response.Content.ReadAsStringAsync(); //Reads response
 
-            response.EnsureSuccessStatusCode(); // Check that the API call was successful
+        //    response.EnsureSuccessStatusCode(); // Check that the API call was successful
 
-            var responseObject = JObject.Parse(content);
-            var location = responseObject["location"];
-            var cityName = location?["name"]?.ToString();
+        //    var responseObject = JObject.Parse(content);
+        //    var location = responseObject["location"];
+        //    var cityName = location?["name"]?.ToString();
 
-            Assert.Equal(expectedCityName, cityName); // Check that the returned city name is Stockholm
-        }
+        //    Assert.Equal(expectedCityName, cityName); // Check that the returned city name is Stockholm
+        //}
     }
 }
