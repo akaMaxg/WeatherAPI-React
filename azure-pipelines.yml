@@ -1,0 +1,57 @@
+trigger:
+- main
+
+pr:
+- '*'
+
+pool:
+  name: MaxAgent
+
+jobs:
+- job: BuildAPI
+  steps:
+  - checkout: self
+    submodules: true
+
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+
+  - script: dotnet restore APIs/WeatherAPI-React
+    displayName: 'Restore API Dependencies'
+    workingDirectory: $(Build.SourcesDirectory)
+
+  - script: dotnet build APIs/WeatherAPI-React --configuration Release
+    displayName: 'Build API'
+    workingDirectory: $(Build.SourcesDirectory)
+
+  - script: dotnet test APIs/WeatherAPITests/WeatherAPITests.csproj --logger "trx;LogFileName=test_results.trx"
+    displayName: 'Run API Tests'
+    workingDirectory: $(Build.SourcesDirectory)
+
+  - script: |
+      dotnet publish "$(Build.SourcesDirectory)/APIs/WeatherAPI-React/WeatherAPI-React.csproj" --configuration Release --output "$(Build.ArtifactStagingDirectory)/publish"
+    displayName: 'Publish API'
+    workingDirectory: $(Build.SourcesDirectory)
+
+  - script: dir "$(Build.ArtifactStagingDirectory)/publish" /s
+    displayName: 'List Publish Folder Contents'
+
+- job: DeployToAzure
+  dependsOn: [BuildAPI]
+  condition: succeeded()
+  steps:
+  - checkout: self
+    submodules: true
+
+  - task: AzureRmWebAppDeployment@4
+    inputs:
+      ConnectionType: 'AzureRM'
+      azureSubscription: 'ServiceName'
+      appType: 'webApp'
+      WebAppName: 'WeatherAPI-TDD'
+      deployToSlotOrASE: true
+      ResourceGroupName: 'myResourceGroup'
+      package: '$(Build.ArtifactStagingDirectory)/publish'
+      AdditionalArguments:
