@@ -23,7 +23,7 @@ namespace WeatherAPItests
         {
             var expectedCityName = "Stockholm";
 
-            var response = await _httpClient.GetAsync("https://localhost:7123/weather");
+            var response = await _httpClient.GetAsync("https://weatherapi-tdd.azurewebsites.net/weather");
             var content = await response.Content.ReadAsStringAsync(); //Reads response
 
             response.EnsureSuccessStatusCode(); // Check that the API call was successful
